@@ -51,6 +51,8 @@ function printLineChart(inData) {
   var keys = Object.keys(totMonth);
   var values = Object.values(totMonth);
 
+  var keyss = Object.keys(totMonth);
+  var valuess = Object.values(totmonth);
 
   var ctx = document.getElementById('myChart').getContext('2d');
     var chart = new Chart(ctx, {
@@ -60,16 +62,18 @@ function printLineChart(inData) {
       data: {
         labels: keys,
         datasets: [{
-          label: 'My First dataset',
-          backgroundColor: 'rgba(50, 50, 50, 0.3)',
-          borderColor: 'rgb(30, 30, 30)',
-          data: values
-        }]
-      },
+            label: 'My First dataset',
+            backgroundColor: 'rgba(50, 50, 50, 0.3)',
+            borderColor: 'rgb(30, 30, 30)',
+            data: values,
+          },
+        ]},
+
 
       // Configuration options go here
       options: {}
     });
+
 
 
 }
@@ -77,10 +81,7 @@ function printLineChart(inData) {
 function printPieChart(inData) {
 
   var totPers={
-    "Marco":0,
-    "Giuseppe":0,
-    "Riccardo":0,
-    "Roberto":0
+
   };
 
   var totale=0;
@@ -93,15 +94,24 @@ function printPieChart(inData) {
     var pers=d.salesman;
     var amount=d.amount;
 
-    console.log(pers,amount);
+    totale+=Number(amount);
+    if (!totPers[pers]) {
 
-    totale+=amount;
-
-    totPers[pers]+=amount;
+      totPers[pers]=0;
+    }
+    totPers[pers]+= Number(amount);
   }
+
+
 
   var keys = Object.keys(totPers);
   var values = Object.values(totPers);
+
+  for (var i = 0; i < values.length; i++) {
+    values[i]=parseFloat((values[i]/totale)*100).toFixed(2);
+  }
+
+
 
   var ctx = document.getElementById('myChart2').getContext('2d');
     var chart = new Chart(ctx, {
@@ -122,18 +132,28 @@ function printPieChart(inData) {
       options: {}
     });
 
-
-  console.log(totPers);
-
-  console.log(totale);
-
+    createOpt(totPers);
 }
 
+function createOpt(totPers) {
 
+  var select = $(".name-selection");
+
+  var keys = Object.keys(totPers);
+
+  for (var i = 0; i < keys.length; i++) {
+    var pers=keys[i];
+    var opt=document.createElement("option");
+    opt.value=pers;
+    opt.text=pers;
+    select.append(opt);
+  }
+}
 
 function init() {
 
   getData();
+
 }
 
 
