@@ -1,5 +1,55 @@
 
+function piallaTutto() {
+
+  /*var canvasCont=$(".canvas-container");
+  canvasCont.remove();
+
+  var template=$("#canvas-template").html();
+  var compiled=Handlebars.compile(template);
+  var newCanvas=compiled();
+
+  canvasCont.append(newCanvas);*/
+
+  $("#myChart").html("");
+  $("#myChart2").html("");
+}
+
+function postData() {
+
+  var opt=$(".name-selection");
+  var date=$("#sales-date");
+  var amount=$("#sales-qnt");
+
+  var outData={
+
+    salesman: opt.val() ,
+    amount: amount.val(),
+    date: date.val(),
+
+  };
+
+  $.ajax({
+
+      url:"http://157.230.17.132:4002/sales",
+      method:"POST",
+      data:outData,
+      success:function (inData,state) {
+
+        getData();
+      },
+
+      error : function(request, state, error) {
+
+        console.log("request", request);
+        console.log("state", state);
+        console.log("error", error);
+      }
+    });
+}
+
 function getData() {
+
+  piallaTutto();
 
   $.ajax({
 
@@ -40,7 +90,7 @@ function printLineChart(inData) {
 
   for (var i = 0; i < inData.length; i++) {
     var d=inData[i];
-    var amount=d.amount;
+    var amount=Number(d.amount);
     var date=d.date;
 
     var mom=moment(date , "DD/MM/YYYY");
@@ -51,9 +101,6 @@ function printLineChart(inData) {
   var keys = Object.keys(totMonth);
   var values = Object.values(totMonth);
 
-  var keyss = Object.keys(totMonth);
-  var valuess = Object.values(totmonth);
-
   var ctx = document.getElementById('myChart').getContext('2d');
     var chart = new Chart(ctx, {
       // The type of chart we want to create
@@ -63,8 +110,8 @@ function printLineChart(inData) {
         labels: keys,
         datasets: [{
             label: 'My First dataset',
-            backgroundColor: 'rgba(50, 50, 50, 0.3)',
-            borderColor: 'rgb(30, 30, 30)',
+            backgroundColor: 'rgba(102, 250, 255, 0.3)',
+            borderColor: 'rgba(102, 204, 255, 0.3)',
             data: values,
           },
         ]},
@@ -122,7 +169,7 @@ function printPieChart(inData) {
         labels: keys,
         datasets: [{
           label: 'My First dataset',
-          backgroundColor: 'rgba(50, 50, 50, 0.3)',
+          backgroundColor: ['rgba(102, 204, 255, 0.3)' , 'rgba(204, 102, 255 ,0.3)','rgba(255, 255, 77 ,0.3)','rgba(26, 255, 140, 0.3)'],
           borderColor: 'rgb(30, 30, 30)',
           data: values
         }]
@@ -154,6 +201,8 @@ function init() {
 
   getData();
 
+  var btn=$("#btn");
+  btn.click(postData);
 }
 
 
